@@ -5,25 +5,25 @@ import message from "antd/es/message";
 const TaskList = ({ fetchTasks, onDone }) => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-      if(tasks.length === 0){
-    const loadTasks = async () => {
-      try {
-        const data = await fetchTasks();
-        setTasks(data.filter((task: { status: string; }) => task.status === "pending").slice(0, 5));
-      } catch (error) {
-        message.error("Error fetching tasks");
-        console.error("Error fetching tasks:", error);
-      } finally {
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchTasks().then((data) => {
+        setTasks(
+          data
+            .filter((task: { status: string }) => task.status === "pending")
+            .slice(0, 5)
+        );
         setIsLoading(false);
-      }
-    };
-    loadTasks();
-  }
+      }).catch((error) => {
+        message.error("Error fetching tasks!");
+        console.error(error);
+        setIsLoading(true);
+      });
+    }, 2000); 
 
-  }, [tasks, fetchTasks]);
-
+    return () => clearInterval(interval);
+  }, [fetchTasks]);
 
   const handleSubmit = async (e) => {
     await onDone(e);
@@ -69,7 +69,11 @@ const TaskList = ({ fetchTasks, onDone }) => {
           className="task-appear"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
-          <TaskCard task={task} onMarkDone={handleSubmit} />
+          <TaskCard
+            task={task}
+            fetchTasks={fetchTasks}
+            onMarkDone={handleSubmit}
+          />
         </div>
       ))}
     </div>

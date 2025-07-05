@@ -1,13 +1,15 @@
-import React from "react";
 import { Card, Button, Checkbox } from "antd";
 import { Task } from "@/types/task";
 
 interface TaskCardProps {
   task: Task;
   onMarkDone: (id: string) => void;
+ 
 }
 
-const TaskCard = ({ task, onMarkDone }: TaskCardProps) => {
+
+const TaskCard = ({ task, onMarkDone  }: TaskCardProps) => {
+
   return (
     <Card
       size="small"
