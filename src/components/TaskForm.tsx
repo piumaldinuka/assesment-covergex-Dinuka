@@ -50,6 +50,7 @@ const AddTaskForm = ({ onSubmit }) => {
         <Button
           className="flex-16 bg-todo-blue hover:bg-blue-600 ml-48 transition-colors"
           htmlType="submit"
+           type="primary"
         >
           Submit
         </Button>
