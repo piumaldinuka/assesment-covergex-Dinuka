@@ -8,20 +8,13 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    cors: true,
   },
   plugins: [
     react(),
     mode === 'development' && {
-      name: 'configure-server',
-      configureServer(server: { middlewares: { use: (arg0: (req: any, res: any, next: any) => void) => void; }; }) {
-        server.middlewares.use((req, res, next) => {
-          if (req.url === '/api/tasks') {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-          }
-          next();
-        });
-      },
-    },   
+      name: 'configure-dev-server',
+    },
   ].filter(Boolean),
   resolve: {
     alias: {
